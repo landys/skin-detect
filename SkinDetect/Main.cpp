@@ -92,6 +92,11 @@ ProcessTraverse(
     const char* FileName,
     int para )
 {
+	string re = string(FileName);
+	int i = re.rfind('\\');
+	re = "ResultData" + re.substr(i) + "_r.jpg";
+	//printf("The result of the file is %s.\n", re.c_str());
+
     // new IplImage structure img0
     IplImage* imgRgb = NULL;
     IplImage* imgYCbCr = NULL;
@@ -129,23 +134,32 @@ ProcessTraverse(
             sn[1].value = (double)Cr/255;
             sn[2].index = -1;
 
-            if( svm_predict( g_SvmModel, sn) <= 0.001 ) {
+			double predict = svm_predict( g_SvmModel, sn);
+			//printf("%lf\n", predict);
+            if( predict <= 0.001 ) {
                 // not a skin pixel
                 ((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+0] = 255;
                 ((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+1] = 0;
                 ((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+2] = 0;
             } else {
                 // skin pixel
+				/*
+				((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+0] = 0;
+				((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+1] = 255;
+				((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+2] = 0;
+				*/
             }
         }
     }
 
+	cvSaveImage(re.c_str(), imgRgb);
+/*
     cvNamedWindow( "1", 1 );
     cvShowImage( "1", imgRgb );
 
     cvWaitKey( 0 );
     cvDestroyWindow( "1" );
-
+*/
     cvReleaseImage( &imgYCbCr );
     cvReleaseImage( &imgRgb );
 }
@@ -258,6 +272,7 @@ int main()
     sp.nr_weight = 0;
     sp.weight_label = NULL;
     sp.weight = NULL;
+	//sp.svm_type = NU_SVC;
 
     printf( "%s\n", svm_check_parameter( &g_SvmProblem, &sp ) );
     g_SvmModel = svm_train( &g_SvmProblem, &sp );
@@ -278,4 +293,6 @@ int main()
     svm_destroy_model( g_SvmModel );
 
     delete [] g_SvmProblem.y;
+
+	printf("%s\n", "end");
 }
