@@ -9,7 +9,7 @@ int main()
 {
 	deque<double> de;
 
-	ifstream in("E:\\projects\\SkinDetect\\codes\\trunk\\SkinDetect\\SkinBayes.model_nozero.txt");
+	ifstream in("E:\\pic_skindetect\\result\\SkinBayes_morePic.model_nozero.txt");
 	double d;
 	while (in >> d)
 	{
@@ -19,7 +19,7 @@ int main()
 
 	sort(de.begin(), de.end());
 
-	ofstream out("E:\\projects\\SkinDetect\\codes\\trunk\\SkinDetect\\SkinBayes.model_nozero_sorted.txt");
+	ofstream out("E:\\pic_skindetect\\result\\SkinBayes_morePic\\SkinBayes_morePic.model_nozero_sorted.txt");
 	int count = 0;
 	for (deque<double>::iterator it=de.begin(); it != de.end(); ++it)
 	{

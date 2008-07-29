@@ -32,6 +32,12 @@ TrainTraverse(
     CvSize imgSize;
 
     imgRgb = cvLoadImage( FileName, CV_LOAD_IMAGE_COLOR );
+	if(imgRgb == NULL)
+	{
+		fprintf(stderr, "unable to load image from %s\n", FileName);
+		return;
+	}
+
     imgSize.width = imgRgb->width;
     imgSize.height = imgRgb->height;
 
@@ -93,6 +99,11 @@ ProcessTraverse(
     CvSize imgSize;
 
     imgRgb = cvLoadImage( FileName, CV_LOAD_IMAGE_COLOR );
+	if(imgRgb == NULL)
+	{
+		fprintf(stderr, "unable to load image from %s\n", FileName);
+		return;
+	}
     imgSize.width = imgRgb->width;
     imgSize.height = imgRgb->height;
 
@@ -125,7 +136,7 @@ ProcessTraverse(
         }
     }
 	// save result
-	fprintf(resultLog, "%-8d%-12d%-11d%-12.3f\n", ++count, totalPoints, skinPoints, (float)skinPoints / totalPoints);
+	fprintf(resultLog, "%-8d%-12d%-11d%-12.3f%s\n", ++count, totalPoints, skinPoints, (float)skinPoints / totalPoints, FileName);
 	cvSaveImage(skinFile.c_str(), imgRgb);
 	//cvSaveImage(modifiedFile.c_str(), imgYCbCr);
 /*
@@ -317,7 +328,7 @@ int main(int argc, char* argv[])
 				printf("Cannot open file %s for write.\n", resultFileName.c_str());
 				return 1;
 			}
-			fprintf(resultLog, "sn      totalPoints skinPoints skinPercent\n");
+			fprintf(resultLog, "sn      totalPoints skinPoints skinPercent fileName\n");
 			FileTraverse(argv[2], ProcessTraverse);
 
 			fclose(resultLog);
