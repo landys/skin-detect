@@ -21,6 +21,12 @@ double g_tor = 2.0; // for test process
 string resultFilePath = "..\\SkinDetect\\ResultData"; // for test process, default value
 FILE* resultLog; // for test process
 
+// number of colors
+static const int N_COLORS = 8;
+// 0-white,default color, 1-red, 2-green, 3-blue, 4-black, 5-yellow, 6-pink, 7-cyan
+static const int COLORS[N_COLORS][3] = {{255, 255, 255}, {255, 0, 0}, {0, 255, 0}, {0, 0, 255}, {0, 0, 0}, {255, 255, 0}, {255, 0, 255}, {0, 255, 255}};
+static const double COLOR_INTERVAL = 0.1;
+
 VOID
 TrainTraverse(
     const char* FileName, 
@@ -80,6 +86,29 @@ TrainTraverse(
     cvReleaseImage( &imgRgb );
 }
 
+// actual - actual value of detector
+// tor - limit
+// rgb - result rgb value, the lenth of rgb must be at least 3.
+void getColor(double actual, double tor, int* rgb)
+{
+	if (actual >= tor)
+	{
+		return;
+	}
+
+	int i = (tor - actual) / COLOR_INTERVAL + 1;
+	if (actual <= COLOR_INTERVAL || i >= N_COLORS)
+	{
+		// default color
+		i = 0;
+	}
+
+	// make result
+	rgb[0] = COLORS[i][0];
+	rgb[1] = COLORS[i][1];
+	rgb[2] = COLORS[i][2];
+}
+
 VOID
 ProcessTraverse(
     const char* FileName,
@@ -113,6 +142,7 @@ ProcessTraverse(
 
 	int totalPoints = 0;
 	int skinPoints = 0;
+	int rgb[3] = {0};
     for( int h = 0; h < imgSize.height; ++h ) {
         for ( int w = 0; w < imgSize.width * 3; w += 3 ) {
             BYTE Y  = ((PUCHAR)(imgYCbCr->imageData + imgYCbCr->widthStep * h))[w+0];
@@ -127,9 +157,10 @@ ProcessTraverse(
 			else
 			{
 				// non skin color
-				((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+0] = 255;
-                ((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+1] = 255;
-                ((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+2] = 255;
+				getColor(g_SkinDetector[Cr][Cb], g_tor, rgb);
+				((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+0] = rgb[0];
+                ((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+1] = rgb[1];
+                ((PUCHAR)(imgRgb->imageData + imgRgb->widthStep * h))[w+2] = rgb[2];
 
 				((PUCHAR)(imgYCbCr->imageData + imgYCbCr->widthStep * h))[w+0] = 0;
 			}
