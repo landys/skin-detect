@@ -7,6 +7,8 @@
 #define BIG_DOUBLE (1e10)
 #define CBCR_SIZE (255)
 
+// in fact CR and CB are exchanged in this file!!
+
 int g_SkinStaticTable[CBCR_SIZE][CBCR_SIZE] = {0}; // for train process
 int g_totalSkinSize = 0;  // for train process
 int g_NonSkinStaticTable[CBCR_SIZE][CBCR_SIZE] = {0};  // for train process
@@ -124,6 +126,7 @@ extern "C" double detectSkinPic(const char* picFile, const double limit)
 	int skinPoints = 0;
 	for( int h = 0; h < imgSize.height; ++h ) {
 		for ( int w = 0; w < imgSize.width * 3; w += 3 ) {
+			// in fact CR and CB are exchanged
 			unsigned char Y  = ((unsigned char*)(imgYCbCr->imageData + imgYCbCr->widthStep * h))[w+0];
 			unsigned char Cb = ((unsigned char*)(imgYCbCr->imageData + imgYCbCr->widthStep * h))[w+1];
 			unsigned char Cr = ((unsigned char*)(imgYCbCr->imageData + imgYCbCr->widthStep * h))[w+2];
@@ -179,6 +182,7 @@ bool statPic(const char* FileName, bool isSkin)
 			unsigned char G = ((unsigned char*)(imgRgb->imageData + imgRgb->widthStep * h))[w+1];
 			unsigned char R = ((unsigned char*)(imgRgb->imageData + imgRgb->widthStep * h))[w+2];
 
+			// in fact CR and CB are exchanged
 			unsigned char Y  = ((unsigned char*)(imgYCbCr->imageData + imgYCbCr->widthStep * h))[w+0];
 			unsigned char Cb = ((unsigned char*)(imgYCbCr->imageData + imgYCbCr->widthStep * h))[w+1];
 			unsigned char Cr = ((unsigned char*)(imgYCbCr->imageData + imgYCbCr->widthStep * h))[w+2];
