@@ -71,37 +71,52 @@ public class SkinDetectorImpl implements SkinDetector {
      * {@inheritDoc}
      */
     public double detectSkinPic(final InputStream jpgIn) {
-        int totalPoints = 0;
-        int skinPoints = 0;
-
+        BufferedImage image = null;
         try {
-            BufferedImage image = ImageIO.read(jpgIn);
-            int width = image.getWidth();
-            int height = image.getHeight();
-            for (int i = 0; i < width; ++i) {
-                for (int j = 0; j < height; ++j) {
-                    // get r, g, b
-                    int rgb = image.getRGB(i, j);
-                    int r = (rgb & 0xff0000) >> 16;
-                    int g = (rgb & 0xff00) >> 8;
-                    int b = rgb & 0xff;
-
-                    // calculate y, cr, cb
-                    int y = (int) (0.299 * r + 0.587 * g + 0.114 * b + 0.5);
-                    int cr = (int) ((r - y) * 0.713 + 128 + 0.5);
-                    int cb = (int) ((b - y) * 0.564 + 128 + 0.5);
-
-                    ++totalPoints;
-                    // check if skin pixel
-                    if (bayesModel[cb][cr] >= limit) {
-                        ++skinPoints;
-                    }
-                }
-            }
+            image = ImageIO.read(jpgIn);
+        } catch (IllegalArgumentException e) {
+            // null input, do nothing
         } catch (IOException e) {
             // do nothing
         }
 
+        if (image == null) {
+            // cannot read the image, it may not be a image file.
+            return -1.0;
+        }
+
+        int skinPoints = 0;
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int rgb = 0;
+        for (int i = 0; i < width; ++i) {
+            for (int j = 0; j < height; ++j) {
+                try {
+                    rgb = image.getRGB(i, j);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // do nothing
+                    continue;
+                }
+
+                // get r, g, b
+                int r = (rgb & 0xff0000) >> 16;
+                int g = (rgb & 0xff00) >> 8;
+                int b = rgb & 0xff;
+
+                // calculate y, cr, cb
+                int y = (int) (0.299 * r + 0.587 * g + 0.114 * b + 0.5);
+                int cr = (int) ((r - y) * 0.713 + 128 + 0.5);
+                int cb = (int) ((b - y) * 0.564 + 128 + 0.5);
+
+                // check if skin pixel
+                if (cb >= 0 && cb < CBCR_SIZE && cr >= 0 && cr < CBCR_SIZE
+                    && bayesModel[cb][cr] >= limit) {
+                    ++skinPoints;
+                }
+            }
+        }
+
+        int totalPoints = width * height;
         return totalPoints == 0 ? -1.0 : (double) skinPoints / totalPoints;
     }
 
