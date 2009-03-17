@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkinDetect", "SkinDetect.vcproj", "{8D758676-B3E8-4753-B013-2D9EB41127B4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkinDetect", "SkinDetect\SkinDetect.vcproj", "{8D758676-B3E8-4753-B013-2D9EB41127B4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DoTest", "..\DoTest\DoTest.vcproj", "{ED95E263-D14F-4925-BA72-4BD9D3FDDE41}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DoTest", "DoTest\DoTest.vcproj", "{ED95E263-D14F-4925-BA72-4BD9D3FDDE41}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkinDetectBayes", "..\SkinDetectBayes\SkinDetectBayes.vcproj", "{6D5FC505-EDB0-4588-A128-51E76906D8F1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkinDetectBayes", "SkinDetectBayes\SkinDetectBayes.vcproj", "{6D5FC505-EDB0-4588-A128-51E76906D8F1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataProcess", "..\DataProcess\DataProcess.vcproj", "{AB4F8083-B9A5-4A7B-BF31-A2940363F532}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataProcess", "DataProcess\DataProcess.vcproj", "{AB4F8083-B9A5-4A7B-BF31-A2940363F532}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkinDetector", "..\SkinDetector\SkinDetector.vcproj", "{189E7942-8F8F-4645-9E52-B42B02BEF06A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SkinDetector", "SkinDetector\SkinDetector.vcproj", "{189E7942-8F8F-4645-9E52-B42B02BEF06A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
